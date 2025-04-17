@@ -76,7 +76,90 @@ def cesar_dec(texto, desplazamiento):
                 texto_dec += texto[i] 
     print(texto_dec)
 
+def codificar_o_decodificar():
+    while True:
+        metodo = input("Ingresa 0 para codificar o 1 para decodificar")
+        if metodo == "0" or metodo == "1":
+            return int(metodo)
+        else:
+            print("Opción inválida. Por favor, ingrese solo 0 o 1.")
+
+def leer_texto(metodo):
+    if metodo == 0:
+        texto = input("Ingrese el texto a codificar: ")
+    else:
+        texto = input("Ingrese el texto a decodificar: ")
+    return texto
+
+def main():
+    """
+    Programa principal donde se elige el metodo a codificar y se
+    obtiene el texto codificado
+    """
+    
+    try:
+        print("Bienvenido(a) al nuestro programa para codificar y descodificar textos")
+        print("Este programa tiene diferentes métodos de cifrado de textos")
+        print("Vos escogés el método que quieras, ya sea para codificar o decodificar el texto")
+        opcion = 1
+        while(opcion != 0):
+            print("0. Salir del programa")
+            print("1. Cifrado César")#los siguientes los comento hasta que los vayamos a usar
+            
+            #print("2.Cifrado monoalfabético con palabra clave")
+            #print("3. Cifrado Vigenère")
+            #print("4. Cifrado PlayFair modificado")
+            #print("5. Cifrado Rail Fence")
+            #print("6. Escítala")
+
+            opcion = int(input("Digite el número: "))
+            
+            match opcion:
+                case 0:
+                    print("Gracias por usar nuestro programa")
+                    print("Nos vemos pronto")
+                    
+                case 1:
+                    metodo = codificar_o_decodificar()
+                    if metodo == 0:
+                        texto = leer_texto(metodo)
+                        desplazamiento = int(input("Digite el desplazamiento a realizar: "))
+                        texto_cod = cesar_cod (texto, desplazamiento)
+                        print(texto_cod)
+                    else:
+                        texto = leer_texto(metodo)
+                        desplazamiento = int(input("Digite el desplazamiento a realizar: "))
+                        texto_cod = cesar_dec (texto, desplazamiento)
+                    
+                case 2:
+                    metodo = codificar_o_decodificar()
+                    
+                case 3:
+                    metodo = codificar_o_decodificar()
+                    
+                case 4:
+                    metodo = codificar_o_decodificar()
+                    
+                case 5:
+                    metodo = codificar_o_decodificar()
+                    
+                case 6:
+                    metodo = codificar_o_decodificar()
+
+                case _:
+                    print("Número no válido")
+                    
+
+
+    except Exception as e:
+        print(f"Ha ocurrido un error: {e}")
+
+
+if __name__ == "__main__":
+    main()
 
 
 
+
+    
     
