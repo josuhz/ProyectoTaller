@@ -74,7 +74,92 @@ def cesar_dec(texto, desplazamiento):
                 texto_dec += alfabeto_cod[indice]
             else:
                 texto_dec += texto[i] 
-    print(texto_dec)
+    return texto_dec
+
+
+def mono_cod(texto, palabra):
+    """
+    Funcion que codifica el texto en cifrado monoalfabético con palabra clave
+    Entradas y restricciones:
+    -Texto a codificar string
+    -palabra clave string no puede ser vacía
+    Salidas:
+    Texto codificado (String)
+    """
+    if type(texto) != str and type(palabra) != str:
+        raise Exception("Texto y palabra deben ser un string")
+    if not palabra:
+        raise Exception("La palabra clave no puede estar vacía")
+
+    alfabeto = "abcdefghijklmnñopqrstuvwxwz"
+    texto = preparar_texto(texto)
+    palabra = preparar_texto(palabra)
+
+    #quita las letras repetidas de la palabra clave si es que tuviera
+    palabra_sin_repetidas = ""
+    for letra in palabra:
+        if letra not in palabra_sin_repetidas and letra in alfabeto:
+            palabra_sin_repetidas += letra
+
+    #Crea el alfabeto con la palabra clave
+    alfabeto_cod = palabra_sin_repetidas
+    for letra in alfabeto:
+        if letra not in alfabeto_cod:
+            alfabeto_cod += letra
+
+    #codifica el texto original
+    texto_cod = ""
+    for letra in texto:
+        if letra in alfabeto:
+            indice = alfabeto.index(letra) #toma la posicion de la letra en el alfabeto
+            texto_cod += alfabeto_cod[indice]
+        else:
+            texto_cod += letra #para mantener los espacios
+
+    return texto_cod
+    
+def mono_dec(texto, palabra):
+    """
+    Funcion que descodifica un texto en cifrado monoalfabético con palabra clave
+    Entradas y restricciones:
+    -Texto a codificar string
+    -palabra clave string no puede ser vacía
+    Salidas:
+    Texto descodificado (String)
+    """
+    if type(texto) != str and type(palabra) != str:
+        raise Exception("Texto y palabra deben ser un string")
+    if not palabra:
+        raise Exception("La palabra clave no puede estar vacía")
+
+    alfabeto = "abcdefghijklmnñopqrstuvwxwz"
+    texto = preparar_texto(texto)
+    palabra = preparar_texto(palabra)
+
+    #quita las letras repetidas de la palabra clave si es que tuviera
+    palabra_sin_repetidas = ""
+    for letra in palabra:
+        if letra not in palabra_sin_repetidas and letra in alfabeto:
+            palabra_sin_repetidas += letra
+
+    #Crea el alfabeto con la palabra clave
+    alfabeto_cod = palabra_sin_repetidas
+    for letra in alfabeto:
+        if letra not in alfabeto_cod:
+            alfabeto_cod += letra
+
+    #decodifica el texto codificado
+    texto_dec = ""
+    for letra in texto:
+        if letra in alfabeto_cod:
+            indice = alfabeto_cod.index(letra) #toma la posicion de la letra en el alfabeto codificado
+            texto_dec += alfabeto[indice]
+        else:
+            texto_dec += letra #para mantener los espacios
+
+    return texto_dec
+
+
 
 def codificar_o_decodificar():
     while True:
@@ -103,14 +188,16 @@ def main():
         print("Vos escogés el método que quieras, ya sea para codificar o decodificar el texto")
         opcion = 1
         while(opcion != 0):
+            print()
+            print()
             print("0. Salir del programa")
             print("1. Cifrado César")#los siguientes los comento hasta que los vayamos a usar
-            
-            #print("2.Cifrado monoalfabético con palabra clave")
+            print("2.Cifrado monoalfabético con palabra clave")
             #print("3. Cifrado Vigenère")
             #print("4. Cifrado PlayFair modificado")
             #print("5. Cifrado Rail Fence")
             #print("6. Escítala")
+            print()
 
             opcion = int(input("Digite el número: "))
             
@@ -125,14 +212,29 @@ def main():
                         texto = leer_texto(metodo)
                         desplazamiento = int(input("Digite el desplazamiento a realizar: "))
                         texto_cod = cesar_cod (texto, desplazamiento)
-                        print(texto_cod)
+                        print()
+                        print("texto codificado: " + texto_cod)
                     else:
                         texto = leer_texto(metodo)
                         desplazamiento = int(input("Digite el desplazamiento a realizar: "))
-                        texto_cod = cesar_dec (texto, desplazamiento)
+                        texto_dec = cesar_dec (texto, desplazamiento)
+                        print()
+                        print("texto decodificado: " + texto_dec)
                     
                 case 2:
                     metodo = codificar_o_decodificar()
+                    if metodo == 0:
+                        texto = leer_texto(metodo)
+                        palabra = input("Digite la palabra clave: ")
+                        texto_cod = mono_cod (texto, palabra)
+                        print()
+                        print("texto codificado: " + texto_cod)
+                    else:
+                        texto = leer_texto(metodo)
+                        palabra = input("Digite la palabra clave: ")
+                        texto_dec = mono_dec (texto, palabra)
+                        print()
+                        print("texto decodificado: " + texto_dec)
                     
                 case 3:
                     metodo = codificar_o_decodificar()
@@ -148,8 +250,6 @@ def main():
 
                 case _:
                     print("Número no válido")
-                    
-
 
     except Exception as e:
         print(f"Ha ocurrido un error: {e}")
