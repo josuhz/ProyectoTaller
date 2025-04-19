@@ -161,9 +161,76 @@ def mono_dec(texto, palabra):
 
 
 
+###
+def vigenere_cod(texto,palabra):
+    """
+    Funcion que codifica un texto en cifrado vigenere con palabra clave
+    Entradas y restricciones:
+    -Texto debe ser string
+    -Palabra clave debe ser string no puede estar vacio
+    Salidas:
+    -Texto codificado (String)
+    """
+    if type(texto) != str and type(palabra) != str:
+        raise Exception("Texto y palabra deben ser un string")
+    if not palabra:
+        raise Exception("La palabra clave no puede estar vacía")
+    alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ"
+                ,"o","p","q","r","s","t","u","v","w","x","y","z"]
+    texto_cod = ""
+    texto = preparar_texto(texto)
+    palabra = preparar_texto(palabra)
+    palabra = palabra * (len(texto)//len(palabra) + 1) #esto es para que la palabra clave se repita todas las veces que cabe en el texto
+    j=0 #Ocupo un contador aparte porque si no cuando habia espacios la palabra clave se adelantaba
+    for i in range(0,len(texto)):
+        if texto[i] in alfabeto:
+            indice = (alfabeto.index(texto[i])+alfabeto.index(palabra[j]))%27 #esto es para sacar la letra que toca
+            texto_cod += alfabeto[indice]
+            j += 1
+        else:
+            texto_cod += texto[i] #esto es lo de los espacios, comas etc
+
+    return texto_cod
+
+def vigenere_dec(texto,palabra):
+    """
+    Funcion que descodifica un texto en cifrado vigenere con palabra clave
+    Entradas y restricciones:
+    -Texto debe ser string
+    -Palabra clave debe ser string no puede estar vacio
+    Salidas:
+    -Texto descodificado (String)
+    """
+    if type(texto) != str and type(palabra) != str:
+        raise Exception("Texto y palabra deben ser un string")
+    if not palabra:
+        raise Exception("La palabra clave no puede estar vacía")
+    alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ"
+                ,"o","p","q","r","s","t","u","v","w","x","y","z"]
+    texto_dec = ""
+    texto = preparar_texto(texto)
+    palabra = preparar_texto(palabra)
+    palabra = palabra * (len(texto)//len(palabra) + 1)
+    j=0
+    for i in range(0,len(texto)):
+        if texto[i] in alfabeto:
+            indice = (alfabeto.index(texto[i])-alfabeto.index(palabra[j]))%27
+            texto_dec += alfabeto[indice]
+            j += 1
+        else:
+            texto_dec += texto[i]
+
+    print(texto_dec)
+    return texto_dec   
+    
+
+
+    
+
+
 def codificar_o_decodificar():
     while True:
-        metodo = input("Ingresa 0 para codificar o 1 para decodificar")
+        metodo = input("Ingresa 0 para codificar o 1 para decodificar: ")
         if metodo == "0" or metodo == "1":
             return int(metodo)
         else:
@@ -175,6 +242,7 @@ def leer_texto(metodo):
     else:
         texto = input("Ingrese el texto a decodificar: ")
     return texto
+
 
 def main():
     """
@@ -193,7 +261,7 @@ def main():
             print("0. Salir del programa")
             print("1. Cifrado César")#los siguientes los comento hasta que los vayamos a usar
             print("2.Cifrado monoalfabético con palabra clave")
-            #print("3. Cifrado Vigenère")
+            print("3. Cifrado Vigenère")
             #print("4. Cifrado PlayFair modificado")
             #print("5. Cifrado Rail Fence")
             #print("6. Escítala")
@@ -238,7 +306,18 @@ def main():
                     
                 case 3:
                     metodo = codificar_o_decodificar()
-                    
+                    if metodo == 0:
+                        texto = leer_texto(metodo)
+                        palabra = input("Digite la palabra clave: ")
+                        texto_cod = vigenere_cod(texto, palabra)
+                        print()
+                        print("texto codificado: " + texto_cod)
+                    else:
+                        texto = leer_texto(metodo)
+                        palabra = input("Digite la palabra clave: ")
+                        texto_dec = vigenere_dec(texto, palabra)
+                        print()
+                        print("texto decodificado: " + texto_dec)
                 case 4:
                     metodo = codificar_o_decodificar()
                     
