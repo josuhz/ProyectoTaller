@@ -91,7 +91,7 @@ def mono_cod(texto, palabra):
     if not palabra:
         raise Exception("La palabra clave no puede estar vacía")
 
-    alfabeto = "abcdefghijklmnñopqrstuvwxwz"
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz"
     texto = preparar_texto(texto)
     palabra = preparar_texto(palabra)
 
@@ -223,9 +223,140 @@ def vigenere_dec(texto,palabra):
     print(texto_dec)
     return texto_dec   
     
-
-
+def playfair_cod(texto, palabra):
+    """
+    Funcion que codifica un texto en cifrado playFair con palabra clave
+    Entradas y restricciones:
+    -Texto debe ser string
+    -Palabra clave debe ser string no puede estar vacio
+    Salidas:
+    -Texto codificado (String)
+    """
+    if type(texto) != str and type(palabra) != str:
+        raise Exception("Texto y palabra deben ser un string")
+    if not palabra:
+        raise Exception("La palabra clave no puede estar vacía")
     
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz123"
+    texto = preparar_texto(texto)
+    palabra = preparar_texto(palabra)
+    palabra_sin_repetidas = ""
+    for letra in palabra:
+        if letra not in palabra_sin_repetidas and letra in alfabeto:
+            palabra_sin_repetidas += letra
+    alfabeto_cod = palabra_sin_repetidas
+    for letra in alfabeto:
+        if letra not in alfabeto_cod:
+            alfabeto_cod += letra
+    matriz = []
+    for i in range(0, 30, 5):
+        matriz.append(list(alfabeto_cod[i:i+5]))
+    texto = texto.split()#divide el texto en lista por palabras
+    texto_cod = ""
+    for palabra in texto:
+        palabra_nueva = ""
+        i = 0
+        # agrega '1' si tiene dos letras iguales seguidas 
+        while i < len(palabra):
+            palabra_nueva += palabra[i]
+            if i + 1 < len(palabra) and palabra[i] == palabra[i+1]:
+                palabra_nueva += "1"
+                i += 1
+            i += 1
+        #agrega 1 si la cantidad de letras de la palabra es impar
+        if len(palabra_nueva) % 2 != 0:
+            palabra_nueva += "1"
+        #agrupar la palabra en pares
+        pares = []
+        i = 0
+        while i < len(palabra_nueva):
+            pares.append(palabra_nueva[i:i+2])
+            i += 2
+        #allar la posicion de cada letra de cada par en la matriz
+        for par in pares:
+            f1 = c1 = f2 = c2 = 0#inicializo las variables de fila y columna
+            for fila in range(6):
+                for col in range(5):
+                    if matriz[fila][col] == par[0]:
+                        f1 = fila
+                        c1 = col
+                    if matriz[fila][col] == par[1]:
+                        f2 = fila
+                        c2 = col
+            # Codifica según el caso
+            if f1 != f2 and c1 != c2:
+                texto_cod += matriz[f1][c2] + matriz[f2][c1]
+            elif f1 == f2:
+                texto_cod += matriz[f1][(c1 + 1) % 5] + matriz[f2][(c2 + 1) % 5]
+            elif c1 == c2:
+                texto_cod += matriz[(f1 + 1) % 6][c1] + matriz[(f2 + 1) % 6][c2]
+        texto_cod += " "
+    return texto_cod.strip()
+
+def playfair_dec(texto, palabra):
+    """
+    Función que decodifica un texto cifrado con Playfair modificado.
+    Entradas:
+    - texto: texto codificado (string)
+    - palabra: palabra clave (string)
+    Salidas:
+    - texto_dec: texto descifrado (string)
+    """
+    if type(texto) != str and type(palabra) != str:
+        raise Exception("Texto y palabra deben ser un string")
+    if not palabra:
+        raise Exception("La palabra clave no puede estar vacía")
+    
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz123"
+    texto = preparar_texto(texto)
+    palabra = preparar_texto(palabra)
+
+    palabra_sin_repetidas = ""
+    for letra in palabra:
+        if letra not in palabra_sin_repetidas and letra in alfabeto:
+            palabra_sin_repetidas += letra
+
+    alfabeto_cod = palabra_sin_repetidas
+    for letra in alfabeto:
+        if letra not in alfabeto_cod:
+            alfabeto_cod += letra
+
+    matriz = []
+    for i in range(0, 30, 5):
+        matriz.append(list(alfabeto_cod[i:i+5]))
+
+    texto = texto.split()  # Lista de palabras
+    texto_dec = ""
+
+    for palabra in texto:
+        pares = []
+        i = 0
+        while i < len(palabra):
+            pares.append(palabra[i:i+2])
+            i += 2
+
+        for par in pares:
+            f1 = c1 = f2 = c2 = 0
+            for fila in range(6):
+                for col in range(5):
+                    if matriz[fila][col] == par[0]:
+                        f1, c1 = fila, col
+                    if matriz[fila][col] == par[1]:
+                        f2, c2 = fila, col
+
+            if f1 != f2 and c1 != c2:
+                texto_dec += matriz[f1][c2] + matriz[f2][c1]
+            elif f1 == f2:
+                texto_dec += matriz[f1][(c1 - 1) % 5] + matriz[f2][(c2 - 1) % 5]
+            elif c1 == c2:
+                texto_dec += matriz[(f1 - 1) % 6][c1] + matriz[(f2 - 1) % 6][c2]
+                
+        texto_dec += " "
+        texto_dec = texto_dec.replace("1","")
+        texto_dec = texto_dec.replace("2","")
+        texto_dec = texto_dec.replace("3","")
+
+    return texto_dec.strip()
 
 
 def codificar_o_decodificar():
@@ -244,10 +375,14 @@ def leer_texto(metodo):
     return texto
 
 
+
+
 def main():
     """
     Programa principal donde se elige el metodo a codificar y se
     obtiene el texto codificado
+    Entradas y restricciones: ninguna
+    Salidas: Impresion del mensaje codificado o decodificado
     """
     
     try:
@@ -259,7 +394,7 @@ def main():
             print()
             print()
             print("0. Salir del programa")
-            print("1. Cifrado César")#los siguientes los comento hasta que los vayamos a usar
+            print("1. Cifrado César")
             print("2.Cifrado monoalfabético con palabra clave")
             print("3. Cifrado Vigenère")
             #print("4. Cifrado PlayFair modificado")
@@ -320,6 +455,18 @@ def main():
                         print("texto decodificado: " + texto_dec)
                 case 4:
                     metodo = codificar_o_decodificar()
+                    if metodo == 0:
+                        texto = leer_texto(metodo)
+                        palabra = input("Digite la palabra clave: ")
+                        texto_cod = playfair_cod(texto, palabra)
+                        print()
+                        print("texto codificado: " + texto_cod)
+                    else:
+                        texto = leer_texto(metodo)
+                        palabra = input("Digite la palabra clave: ")
+                        texto_dec = playfair_dec(texto, palabra)
+                        print()
+                        print("texto decodificado: " + texto_dec)
                     
                 case 5:
                     metodo = codificar_o_decodificar()
@@ -336,9 +483,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-    
     
