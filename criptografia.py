@@ -436,9 +436,6 @@ def railfence_dec(texto):
         if len(texto) % 4 != 0:
             texto += "-"
     txt_arriba = texto[:(len(texto)//4):]
-    txt = ""
-    for i in range(len(txt_arriba)):
-        txt += txt_arriba[i] + " "*3
     txt_medio = texto[(len(texto)//4):len(texto)//4+(len(texto)//4)*2:]
     txt_abajo = texto[len(texto)//4+(len(texto)//4)*2::]
 
