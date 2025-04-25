@@ -8,16 +8,26 @@ def preparar_texto (texto):
     Restricciones: Texto debe ser un string
     """
     if type(texto) != str:
-        raise Exception("Texto debe ser un string")
-    texto = texto.lower()
-    #
-    for i in range(0,len(texto)):
-        texto = texto.replace("á","a")
-        texto = texto.replace("é","e")
-        texto = texto.replace("í","i")
-        texto = texto.replace("ó","o")
-        texto = texto.replace("ú","u")
-    return texto
+            raise Exception("Texto debe ser un string")
+    if verificar: 
+        texto = texto.lower()
+        #
+        for i in range(0,len(texto)):
+            texto = texto.replace("á","a")
+            texto = texto.replace("é","e")
+            texto = texto.replace("í","i")
+            texto = texto.replace("ó","o")
+            texto = texto.replace("ú","u")
+        return texto
+    else:
+        for i in range(0,len(texto)):
+            texto = texto.replace("á","a")
+            texto = texto.replace("é","e")
+            texto = texto.replace("í","i")
+            texto = texto.replace("ó","o")
+            texto = texto.replace("ú","u")
+        
+        
 
 def cesar_cod (texto, desplazamiento):
     """
@@ -272,7 +282,7 @@ def playfair_cod(texto, palabra):
         while i < len(palabra_nueva):
             pares.append(palabra_nueva[i:i+2])
             i += 2
-        #allar la posicion de cada letra de cada par en la matriz
+        #hallar la posicion de cada letra de cada par en la matriz
         for par in pares:
             f1 = c1 = f2 = c2 = 0#inicializo las variables de fila y columna
             for fila in range(6):
@@ -359,6 +369,110 @@ def playfair_dec(texto, palabra):
     return texto_dec.strip()
 
 
+###
+def cambiar_espacios(texto):
+    """
+    Funcion que cambia los espacios por guiones
+    Entradas y restricciones:
+    -Texto debe ser un string
+    Salida: El texto con guiones en lugar de espacios (String)
+    """
+    if type(texto) != str:
+        raise Exception("Texto debe ser un string")
+    texto = texto.replace(" ","-")
+    return texto
+def cambiar_guiones(texto):
+    """
+    Funcion que cambia los guiones por espacios y quita los espacios al final del texto
+    Entradas y restricciones:
+    -Texto debe ser un string
+    Salida: El texto con espacios en lugar de guiones
+    """
+    if type(texto) != str:
+        raise Exception("Texto debe ser un string")
+    texto = texto.replace("-"," ")
+    texto = texto.strip()
+    return texto
+            
+def railfence_cod(texto):
+    """
+    Funcion que codifica el texto a cifrado railfence
+    Entradadas y restricciones:
+    -Texto debe ser un string
+    Salida: El texto codificado a cifrado railfence (String)
+    """
+    if type(texto) != str:
+        raise Exception("Texto debe ser un string")
+    for i in range(len(texto)):
+        if len(texto) % 4 != 0:
+            texto += " "
+        
+    texto = cambiar_espacios(texto)
+    texto_c = texto[::4] + texto[1::2] + texto[2::4]
+    cont = 0
+    texto_cod = ""
+    for i in range(len(texto_c)):
+        if cont == 5:
+            texto_cod += " "
+            cont = 0
+        texto_cod += texto_c[i]
+        cont +=1
+        
+    return texto_cod
+
+
+def railfence_dec(texto):
+    """
+    Funcion que descodifica el texto del cifrado railfence
+    Entradadas y restricciones:
+    -Texto debe ser un string
+    Salida: El texto descodificado del cifrado railfence (String)
+    """
+    if type(texto) != str:
+        raise Exception("Texto debe ser un string")
+    
+    texto = texto.replace(" ","")
+    for i in range(len(texto)):
+        if len(texto) % 4 != 0:
+            texto += "-"
+    txt_arriba = texto[:(len(texto)//4):]
+    txt = ""
+    for i in range(len(txt_arriba)):
+        txt += txt_arriba[i] + " "*3
+    txt_medio = texto[(len(texto)//4):len(texto)//4+(len(texto)//4)*2:]
+    txt_abajo = texto[len(texto)//4+(len(texto)//4)*2::]
+
+
+    
+    texto_dec = ""
+    cont =0
+    contA =0
+    contB= 0
+    contC=0
+    for i in range(len(txt_medio)):
+        if cont == 0:
+            texto_dec += txt_arriba[contA] + txt_medio[contB]
+            cont = 1
+            contA +=1
+            contB += 1
+
+        elif cont ==1:
+            texto_dec += txt_abajo[contC] + txt_medio[contB]
+            cont = 0
+            contC += 1
+            contB += 1
+    texto_dec = cambiar_guiones(texto_dec)
+    print(texto_dec)
+            
+        
+        
+
+    
+        
+
+
+    
+
 def codificar_o_decodificar():
     while True:
         metodo = input("Ingresa 0 para codificar o 1 para decodificar: ")
@@ -366,6 +480,7 @@ def codificar_o_decodificar():
             return int(metodo)
         else:
             print("Opción inválida. Por favor, ingrese solo 0 o 1.")
+            
 
 def leer_texto(metodo):
     if metodo == 0:
@@ -397,8 +512,8 @@ def main():
             print("1. Cifrado César")
             print("2.Cifrado monoalfabético con palabra clave")
             print("3. Cifrado Vigenère")
-            #print("4. Cifrado PlayFair modificado")
-            #print("5. Cifrado Rail Fence")
+            print("4. Cifrado PlayFair modificado")
+            print("5. Cifrado Rail Fence")
             #print("6. Escítala")
             print()
 
@@ -470,6 +585,16 @@ def main():
                     
                 case 5:
                     metodo = codificar_o_decodificar()
+                    if metodo == 0:
+                        texto = leer_texto(metodo)
+                        texto_cod = railfence_cod(texto)
+                        print()
+                        print("texto codificado: " + texto_cod)
+                    else:
+                        texto = leer_texto(metodo)
+                        texto_dec = railfence_dec(texto)
+                        print()
+                        print("texto decodificado: " + texto_dec)
                     
                 case 6:
                     metodo = codificar_o_decodificar()
