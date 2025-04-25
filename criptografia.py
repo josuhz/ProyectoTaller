@@ -459,7 +459,8 @@ def railfence_dec(texto):
             contC += 1
             contB += 1
     texto_dec = cambiar_guiones(texto_dec)
-    print(texto_dec)
+    
+    return texto_dec
             
         
         
