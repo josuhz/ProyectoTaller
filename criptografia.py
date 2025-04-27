@@ -1,34 +1,26 @@
-def preparar_texto (texto):
+def preparar_texto(texto):
     """
     Convierte el texto a minusculas, sustituye acentos y elimina espacios
-    al inicio y al final
+    al inicio y al final.
     Entradas: texto a procesar
-    Salidas: Texto sin mayusculas, acentos y espacios al inicio o
-    al final
-    Restricciones: Texto debe ser un string
+    Salidas: Texto sin mayúsculas, acentos y espacios al inicio o al final.
+    Restricciones: Texto debe ser un string.
     """
     if type(texto) != str:
-            raise Exception("Texto debe ser un string")
-    if verificar: 
-        texto = texto.lower()
-        
-        for i in range(0,len(texto)):
-            texto = texto.replace("á","a")
-            texto = texto.replace("é","e")
-            texto = texto.replace("í","i")
-            texto = texto.replace("ó","o")
-            texto = texto.replace("ú","u")
-        return texto
-    else:
-        for i in range(0,len(texto)):
-            texto = texto.replace("á","a")
-            texto = texto.replace("é","e")
-            texto = texto.replace("í","i")
-            texto = texto.replace("ó","o")
-            texto = texto.replace("ú","u")
-        
-        
+        raise Exception("Texto debe ser un string")
 
+    texto = texto.lower() 
+    texto = texto.strip()
+    
+    texto = texto.replace("á", "a")
+    texto = texto.replace("é", "e")
+    texto = texto.replace("í", "i")
+    texto = texto.replace("ó", "o")
+    texto = texto.replace("ú", "u")
+    
+    return texto
+        
+###
 def cesar_cod (texto, desplazamiento):
     """
     Funcion que codifica el texto en cifrado cesar
@@ -38,8 +30,7 @@ def cesar_cod (texto, desplazamiento):
     Salidas:
     Texto codificado (String)
     """
-    if type(texto) != str:
-        raise Exception("Texto debe ser un string")
+    es_string(texto)
     if type(desplazamiento) != int:
         raise Exception("El desplazamiento debe ser un numero entero")
     alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ"
@@ -67,8 +58,7 @@ def cesar_dec(texto, desplazamiento):
     Salidas:
     Texto descodificado (String)
     """
-    if type(texto) != str:
-        raise Exception("Texto debe ser un string")
+    es_string(texto)
     if type(desplazamiento) != int:
         raise Exception("El desplazamiento debe ser un numero entero")
     alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ"
@@ -85,7 +75,7 @@ def cesar_dec(texto, desplazamiento):
                 texto_dec += texto[i] 
     return texto_dec
 
-
+###
 def mono_cod(texto, palabra):
     """
     Funcion que codifica el texto en cifrado monoalfabético con palabra clave
@@ -95,8 +85,8 @@ def mono_cod(texto, palabra):
     Salidas:
     Texto codificado (String)
     """
-    if type(texto) != str and type(palabra) != str:
-        raise Exception("Texto y palabra deben ser un string")
+    es_string(texto)
+    es_string(palabra)
     if not palabra:
         raise Exception("La palabra clave no puede estar vacía")
 
@@ -120,7 +110,7 @@ def mono_cod(texto, palabra):
     texto_cod = ""
     for letra in texto:
         if letra in alfabeto:
-            indice = alfabeto.index(letra) #toma la posicion de la letra en el alfabeto
+            indice = alfabeto.index(letra) 
             texto_cod += alfabeto_cod[indice]
         else:
             texto_cod += letra #para mantener los espacios
@@ -136,8 +126,8 @@ def mono_dec(texto, palabra):
     Salidas:
     Texto descodificado (String)
     """
-    if type(texto) != str and type(palabra) != str:
-        raise Exception("Texto y palabra deben ser un string")
+    es_string(texto)
+    es_string(palabra)
     if not palabra:
         raise Exception("La palabra clave no puede estar vacía")
 
@@ -161,14 +151,12 @@ def mono_dec(texto, palabra):
     texto_dec = ""
     for letra in texto:
         if letra in alfabeto_cod:
-            indice = alfabeto_cod.index(letra) #toma la posicion de la letra en el alfabeto codificado
+            indice = alfabeto_cod.index(letra) 
             texto_dec += alfabeto[indice]
         else:
             texto_dec += letra #para mantener los espacios
 
     return texto_dec
-
-
 
 ###
 def vigenere_cod(texto,palabra):
@@ -180,8 +168,8 @@ def vigenere_cod(texto,palabra):
     Salidas:
     -Texto codificado (String)
     """
-    if type(texto) != str and type(palabra) != str:
-        raise Exception("Texto y palabra deben ser un string")
+    es_string(texto)
+    es_string(palabra)
     if not palabra:
         raise Exception("La palabra clave no puede estar vacía")
     alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ"
@@ -190,14 +178,14 @@ def vigenere_cod(texto,palabra):
     texto = preparar_texto(texto)
     palabra = preparar_texto(palabra)
     palabra = palabra * (len(texto)//len(palabra) + 1) #esto es para que la palabra clave se repita todas las veces que cabe en el texto
-    j=0 #Ocupo un contador aparte porque si no cuando habia espacios la palabra clave se adelantaba
+    j=0 #contador aparte porque si no cuando habia espacios la palabra clave se adelantaba
     for i in range(0,len(texto)):
         if texto[i] in alfabeto:
             indice = (alfabeto.index(texto[i])+alfabeto.index(palabra[j]))%27 #esto es para sacar la letra que toca
             texto_cod += alfabeto[indice]
             j += 1
         else:
-            texto_cod += texto[i] #esto es lo de los espacios, comas etc
+            texto_cod += texto[i] #espacios, comas etc
 
     return texto_cod
 
@@ -210,8 +198,8 @@ def vigenere_dec(texto,palabra):
     Salidas:
     -Texto descodificado (String)
     """
-    if type(texto) != str and type(palabra) != str:
-        raise Exception("Texto y palabra deben ser un string")
+    es_string(texto)
+    es_string(palabra)
     if not palabra:
         raise Exception("La palabra clave no puede estar vacía")
     alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ"
@@ -231,7 +219,8 @@ def vigenere_dec(texto,palabra):
 
     print(texto_dec)
     return texto_dec   
-    
+
+###
 def playfair_cod(texto, palabra):
     """
     Funcion que codifica un texto en cifrado playFair con palabra clave
@@ -241,8 +230,7 @@ def playfair_cod(texto, palabra):
     Salidas:
     -Texto codificado (String)
     """
-    if type(texto) != str and type(palabra) != str:
-        raise Exception("Texto y palabra deben ser un string")
+    es_string(texto)
     if not palabra:
         raise Exception("La palabra clave no puede estar vacía")
     
@@ -250,6 +238,7 @@ def playfair_cod(texto, palabra):
     texto = preparar_texto(texto)
     palabra = preparar_texto(palabra)
     palabra_sin_repetidas = ""
+    #prepara alfabeto codificado
     for letra in palabra:
         if letra not in palabra_sin_repetidas and letra in alfabeto:
             palabra_sin_repetidas += letra
@@ -311,8 +300,8 @@ def playfair_dec(texto, palabra):
     Salidas:
     - texto_dec: texto descifrado (string)
     """
-    if type(texto) != str and type(palabra) != str:
-        raise Exception("Texto y palabra deben ser un string")
+    es_string(texto)
+    es_string(palabra)
     if not palabra:
         raise Exception("La palabra clave no puede estar vacía")
     
@@ -367,33 +356,7 @@ def playfair_dec(texto, palabra):
 
     return texto_dec.strip()
 
-
-
-def cambiar_espacios(texto):
-    """
-    Funcion que cambia los espacios por guiones
-    Entradas y restricciones:
-    -Texto debe ser un string
-    Salida: El texto con guiones en lugar de espacios (String)
-    """
-    if type(texto) != str:
-        raise Exception("Texto debe ser un string")
-    texto = texto.replace(" ","-")
-    return texto
-
-def cambiar_guiones(texto):
-    """
-    Funcion que cambia los guiones por espacios y quita los espacios al final del texto
-    Entradas y restricciones:
-    -Texto debe ser un string
-    Salida: El texto con espacios en lugar de guiones
-    """
-    if type(texto) != str:
-        raise Exception("Texto debe ser un string")
-    texto = texto.replace("-"," ")
-    texto = texto.strip()
-    return texto
-
+###
 def railfence_cod(texto):
     """
     Funcion que codifica el texto a cifrado railfence
@@ -401,8 +364,7 @@ def railfence_cod(texto):
     -Texto debe ser un string
     Salida: El texto codificado a cifrado railfence (String)
     """
-    if type(texto) != str:
-        raise Exception("Texto debe ser un string")
+    es_string(texto)
     for i in range(len(texto)):
         if len(texto) % 4 != 0:
             texto += " "
@@ -420,7 +382,6 @@ def railfence_cod(texto):
         
     return texto_cod
 
-
 def railfence_dec(texto):
     """
     Funcion que descodifica el texto del cifrado railfence
@@ -428,8 +389,7 @@ def railfence_dec(texto):
     -Texto debe ser un string
     Salida: El texto descodificado del cifrado railfence (String)
     """
-    if type(texto) != str:
-        raise Exception("Texto debe ser un string")
+    es_string(texto)
     
     texto = texto.replace(" ","")
     for i in range(len(texto)):
@@ -460,7 +420,7 @@ def railfence_dec(texto):
     
     return texto_dec
 
-
+###
 def escitala_cod(texto, lineas):
     """
     Funcion que codifica el texto usando el método Escítala con la cantidad
@@ -470,8 +430,7 @@ def escitala_cod(texto, lineas):
     -lineas entero mayor que 1
     Salida: El texto descodificado del cifrado Escitala (String)
     """
-    if type(texto) != str:
-        raise Exception("Texto debe ser un string")
+    es_string(texto)
     if type(lineas) != int or lineas <=1:
         raise Exception("lineas debe ser entero mayor a 1")
     
@@ -511,8 +470,7 @@ def escitala_dec(texto, lineas):
     -lineas entero mayor que 1
     Salida: El texto descodificado del cifrado Escitala (String)
     """
-    if type(texto) != str:
-        raise Exception("Texto debe ser un string")
+    es_string(texto)
     if type(lineas) != int or lineas <= 1:
         raise Exception("lineas debe ser entero mayor a 1")
     
@@ -543,8 +501,39 @@ def escitala_dec(texto, lineas):
     texto_dec = cambiar_guiones(texto_dec).strip()
     return texto_dec
 
+###
+def cambiar_espacios(texto):
+    """
+    Funcion que cambia los espacios por guiones
+    Entradas y restricciones:
+    -Texto debe ser un string
+    Salida: El texto con guiones en lugar de espacios (String)
+    """
+    es_string(texto)
+    texto = texto.replace(" ","-")
+    return texto
 
+###
+def cambiar_guiones(texto):
+    """
+    Funcion que cambia los guiones por espacios y quita los espacios al final del texto
+    Entradas y restricciones:
+    -Texto debe ser un string
+    Salida: El texto con espacios en lugar de guiones
+    """
+    es_string(texto)
+    texto = texto.replace("-"," ")
+    texto = texto.strip()
+    return texto
+
+###
 def codificar_o_decodificar():
+    """
+    Subrutina que interactúa con el usuario para saber si quiere codificar o decodificar
+    Entradas y restricciones:
+    -Ninguna
+    Salida: O o 1 dependiendo de lo que quiera el usuario
+    """
     while True:
         metodo = input("Ingresa 0 para codificar o 1 para decodificar: ")
         if metodo == "0" or metodo == "1":
@@ -552,14 +541,33 @@ def codificar_o_decodificar():
         else:
             print("Opción inválida. Por favor, ingrese solo 0 o 1.")
             
-
+###
 def leer_texto(metodo):
+    """
+    Subrutina que interactúa con el usuario para que ingrese el texto a codificar o
+    decodificar dependiendo de la entrada
+    Entradas y restricciones:
+    -Método: entero 0 o 1
+    Salida: Texto string
+    """
     if metodo == 0:
         texto = input("Ingrese el texto a codificar: ")
     else:
         texto = input("Ingrese el texto a decodificar: ")
     return texto
 
+###
+def es_string(texto):
+    """
+    Subrutina que comprueba si la entrada es un string
+    Entradas y restricciones:
+    -Texto string
+    Salida: Error si no es string
+    """
+    if type(texto) != str:
+        raise Exception("Texto o palabra debe ser un string")
+
+###
 def main():
     """
     Programa principal donde se elige el metodo a codificar y se
@@ -650,7 +658,7 @@ def main():
                         texto_dec = playfair_dec(texto, palabra)
                         print()
                         print("texto decodificado: " + texto_dec)
-                    
+            
                 case 5:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
