@@ -11,7 +11,7 @@ def preparar_texto (texto):
             raise Exception("Texto debe ser un string")
     if verificar: 
         texto = texto.lower()
-        #
+        
         for i in range(0,len(texto)):
             texto = texto.replace("á","a")
             texto = texto.replace("é","e")
@@ -44,7 +44,7 @@ def cesar_cod (texto, desplazamiento):
         raise Exception("El desplazamiento debe ser un numero entero")
     alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ"
                 ,"o","p","q","r","s","t","u","v","w","x","y","z"]
-    #Mae lo que hace la linea de abajo nd mas es crear el alfabeto codificado
+    #crear el alfabeto codificado
     #Segun el desplazamiento
     alfabeto_cod = alfabeto[desplazamiento::] + alfabeto[:desplazamiento]
     texto = preparar_texto(texto)
@@ -54,8 +54,7 @@ def cesar_cod (texto, desplazamiento):
                 indice = alfabeto.index(texto[i])
                 texto_cod += alfabeto_cod[indice]
             else:
-                texto_cod += texto[i] #Este else es por si hubiera un espacio,
-                #una coma o algo que lo deje y lo añada nd mas
+                texto_cod += texto[i] 
     
     return texto_cod
 
@@ -335,7 +334,7 @@ def playfair_dec(texto, palabra):
     for i in range(0, 30, 5):
         matriz.append(list(alfabeto_cod[i:i+5]))
 
-    texto = texto.split()  # Lista de palabras
+    texto = texto.split()  
     texto_dec = ""
 
     for palabra in texto:
@@ -369,7 +368,7 @@ def playfair_dec(texto, palabra):
     return texto_dec.strip()
 
 
-###
+
 def cambiar_espacios(texto):
     """
     Funcion que cambia los espacios por guiones
@@ -381,6 +380,7 @@ def cambiar_espacios(texto):
         raise Exception("Texto debe ser un string")
     texto = texto.replace(" ","-")
     return texto
+
 def cambiar_guiones(texto):
     """
     Funcion que cambia los guiones por espacios y quita los espacios al final del texto
@@ -393,7 +393,7 @@ def cambiar_guiones(texto):
     texto = texto.replace("-"," ")
     texto = texto.strip()
     return texto
-            
+
 def railfence_cod(texto):
     """
     Funcion que codifica el texto a cifrado railfence
@@ -439,8 +439,6 @@ def railfence_dec(texto):
     txt_medio = texto[(len(texto)//4):len(texto)//4+(len(texto)//4)*2:]
     txt_abajo = texto[len(texto)//4+(len(texto)//4)*2::]
 
-
-    
     texto_dec = ""
     cont =0
     contA =0
@@ -461,15 +459,90 @@ def railfence_dec(texto):
     texto_dec = cambiar_guiones(texto_dec)
     
     return texto_dec
-            
-        
-        
 
+
+def escitala_cod(texto, lineas):
+    """
+    Funcion que codifica el texto usando el método Escítala con la cantidad
+    de líneas indicada.
+    Entradadas y restricciones:
+    -Texto debe ser un string
+    -lineas entero mayor que 1
+    Salida: El texto descodificado del cifrado Escitala (String)
+    """
+    if type(texto) != str:
+        raise Exception("Texto debe ser un string")
+    if type(lineas) != int or lineas <=1:
+        raise Exception("lineas debe ser entero mayor a 1")
     
-        
+    #Hace que el texto sea multiplo de las lineas
+    while len(texto)%lineas != 0:
+        texto += " "
+    texto = cambiar_espacios(texto)
+    #crea las filas según el acomodo diagonal del texto
+    filas = []
+    for i in range(lineas):
+        filas.append("")
+    for i in range(len(texto)):
+        filas[i%lineas] += texto[i]
+    #une las filas en un string
+    mensaje_cod = ""
+    for fila in filas:
+        mensaje_cod+= fila
+    #agrupa cada 5 caracteres el texto codificado
+    grupos_cinco = []
+    for j in range(0, len(mensaje_cod), 5):
+        grupos_cinco.append(mensaje_cod[j:j+5])
+    #hace el string con los grupos de 5 con espacios 
+    texto_cod = ""
+    for k in range(len(grupos_cinco)):
+        texto_cod += grupos_cinco[k] + " "
+    texto_cod = texto_cod.strip()
 
-
+    return texto_cod
     
+
+def escitala_dec(texto, lineas):
+    """
+    Funcion que decodifica el texto usando el método Escítala con la cantidad
+    de líneas indicada.
+    Entradadas y restricciones:
+    -Texto debe ser un string
+    -lineas entero mayor que 1
+    Salida: El texto descodificado del cifrado Escitala (String)
+    """
+    if type(texto) != str:
+        raise Exception("Texto debe ser un string")
+    if type(lineas) != int or lineas <= 1:
+        raise Exception("lineas debe ser entero mayor a 1")
+    
+    texto = texto.replace(" ", "")
+
+    if len(texto) % lineas != 0:
+        raise Exception("La longitud del texto no es múltiplo de las líneas. No se puede decodificar.")
+    
+    columnas = len(texto) // lineas
+    #crea una matriz
+    matriz = []
+    for i in range(lineas):
+        fila = []
+        for j in range(columnas):
+            fila.append("")
+        matriz.append(fila)
+    #Mete cada letra en el orden respectivo en la matriz
+    index = 0
+    for i in range(lineas):
+        for j in range(columnas):
+            matriz[i][j] = texto[index]
+            index += 1
+    #decodifica el texto de la matriz
+    texto_dec = ""
+    for j in range(columnas):
+        for i in range(lineas):
+            texto_dec += matriz[i][j]
+    texto_dec = cambiar_guiones(texto_dec).strip()
+    return texto_dec
+
 
 def codificar_o_decodificar():
     while True:
@@ -487,13 +560,10 @@ def leer_texto(metodo):
         texto = input("Ingrese el texto a decodificar: ")
     return texto
 
-
-
-
 def main():
     """
     Programa principal donde se elige el metodo a codificar y se
-    obtiene el texto codificado
+    obtiene el texto codificado o decodificado
     Entradas y restricciones: ninguna
     Salidas: Impresion del mensaje codificado o decodificado
     """
@@ -512,7 +582,7 @@ def main():
             print("3. Cifrado Vigenère")
             print("4. Cifrado PlayFair modificado")
             print("5. Cifrado Rail Fence")
-            #print("6. Escítala")
+            print("6. Escítala")
             print()
 
             opcion = int(input("Digite el número: "))
@@ -596,7 +666,18 @@ def main():
                     
                 case 6:
                     metodo = codificar_o_decodificar()
-
+                    if metodo == 0:
+                        texto = leer_texto(metodo)
+                        lineas = int(input("Ingrese la cantidad de lineas: "))
+                        texto_cod = escitala_cod(texto, lineas)
+                        print()
+                        print("texto codificado: " + texto_cod)
+                    else:
+                        texto = leer_texto(metodo)
+                        lineas = int(input("Ingrese la cantidad de lineas: "))
+                        texto_dec = escitala_dec(texto, lineas)
+                        print()
+                        print("texto decodificado: " + texto_dec)
                 case _:
                     print("Número no válido")
 
@@ -606,4 +687,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
+
+
+ 
