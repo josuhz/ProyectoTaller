@@ -1,3 +1,4 @@
+
 def preparar_texto(texto):
     """
     Convierte el texto a minusculas, sustituye acentos y elimina espacios
@@ -31,8 +32,8 @@ def cesar_cod (texto, desplazamiento):
     Texto codificado (String)
     """
     es_string(texto)
-    if type(desplazamiento) != int:
-        raise Exception("El desplazamiento debe ser un numero entero")
+    if type(desplazamiento) != int and desplazamiento < 1:
+        raise Exception("El desplazamiento debe ser un numero entero positivo")
     alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ"
                 ,"o","p","q","r","s","t","u","v","w","x","y","z"]
     #crear el alfabeto codificado
@@ -131,7 +132,7 @@ def mono_dec(texto, palabra):
     if not palabra:
         raise Exception("La palabra clave no puede estar vacía")
 
-    alfabeto = "abcdefghijklmnñopqrstuvwxwz"
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz"
     texto = preparar_texto(texto)
     palabra = preparar_texto(palabra)
 
@@ -542,6 +543,15 @@ def codificar_o_decodificar():
             print("Opción inválida. Por favor, ingrese solo 0 o 1.")
             
 ###
+def limpiar_pantalla():
+    """
+    Subrutina que imprime líneas en blanco para limpiar la pantalla.
+    Entradas y restricciones: ninguna.
+    Salidas: 30 líneas en blanco.
+    """
+    print("\n"* 30)
+
+###
 def leer_texto(metodo):
     """
     Subrutina que interactúa con el usuario para que ingrese el texto a codificar o
@@ -550,10 +560,24 @@ def leer_texto(metodo):
     -Método: entero 0 o 1
     Salida: Texto string
     """
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz123"
+
     if metodo == 0:
-        texto = input("Ingrese el texto a codificar: ")
+        mensaje = "Ingrese el texto a codificar: "
     else:
-        texto = input("Ingrese el texto a decodificar: ")
+        mensaje = "Ingrese el texto a decodificar: "
+    
+    while True:
+        texto = input(mensaje)
+        texto = preparar_texto(texto)
+        if texto == "":
+            print("El texto no puede ser vacío.")
+            continue
+        if any(letra not in alfabeto for letra in texto):
+            print("El texto contiene caracteres no permitidos.")
+            continue
+        break
+
     return texto
 
 ###
@@ -577,16 +601,17 @@ def main():
     """
     
     try:
+        print()
+        print("                  ╔═╗┬─┐┬┌─┐┌┬┐┌─┐┌─┐┬─┐┌─┐┌─┐┬┌─┐")
+        print("                  ║  ├┬┘│├─┘ │ │ ││ ┬├┬┘├─┤├┤ │├─┤")
+        print("                  ╚═╝┴└─┴┴   ┴ └─┘└─┘┴└─┴ ┴└  ┴┴ ┴")
         print("Bienvenido(a) al nuestro programa para codificar y descodificar textos")
         print("Este programa tiene diferentes métodos de cifrado de textos")
-        print("Vos escogés el método que quieras, ya sea para codificar o decodificar el texto")
         opcion = 1
-        while(opcion != 0):
-            print()
-            print()
+        while True:
             print("0. Salir del programa")
             print("1. Cifrado César")
-            print("2.Cifrado monoalfabético con palabra clave")
+            print("2. Cifrado monoalfabético con palabra clave")
             print("3. Cifrado Vigenère")
             print("4. Cifrado PlayFair modificado")
             print("5. Cifrado Rail Fence")
@@ -594,42 +619,43 @@ def main():
             print()
 
             opcion = int(input("Digite el número: "))
-            
+
             match opcion:
                 case 0:
                     print("Gracias por usar nuestro programa")
                     print("Nos vemos pronto")
-                    
+                    break
+
                 case 1:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
                         texto = leer_texto(metodo)
                         desplazamiento = int(input("Digite el desplazamiento a realizar: "))
-                        texto_cod = cesar_cod (texto, desplazamiento)
+                        texto_cod = cesar_cod(texto, desplazamiento)
                         print()
                         print("texto codificado: " + texto_cod)
                     else:
                         texto = leer_texto(metodo)
                         desplazamiento = int(input("Digite el desplazamiento a realizar: "))
-                        texto_dec = cesar_dec (texto, desplazamiento)
+                        texto_dec = cesar_dec(texto, desplazamiento)
                         print()
                         print("texto decodificado: " + texto_dec)
-                    
+
                 case 2:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
                         texto = leer_texto(metodo)
                         palabra = input("Digite la palabra clave: ")
-                        texto_cod = mono_cod (texto, palabra)
+                        texto_cod = mono_cod(texto, palabra)
                         print()
                         print("texto codificado: " + texto_cod)
                     else:
                         texto = leer_texto(metodo)
                         palabra = input("Digite la palabra clave: ")
-                        texto_dec = mono_dec (texto, palabra)
+                        texto_dec = mono_dec(texto, palabra)
                         print()
                         print("texto decodificado: " + texto_dec)
-                    
+
                 case 3:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
@@ -644,6 +670,7 @@ def main():
                         texto_dec = vigenere_dec(texto, palabra)
                         print()
                         print("texto decodificado: " + texto_dec)
+
                 case 4:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
@@ -658,7 +685,7 @@ def main():
                         texto_dec = playfair_dec(texto, palabra)
                         print()
                         print("texto decodificado: " + texto_dec)
-            
+
                 case 5:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
@@ -671,7 +698,7 @@ def main():
                         texto_dec = railfence_dec(texto)
                         print()
                         print("texto decodificado: " + texto_dec)
-                    
+
                 case 6:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
@@ -686,8 +713,12 @@ def main():
                         texto_dec = escitala_dec(texto, lineas)
                         print()
                         print("texto decodificado: " + texto_dec)
+
                 case _:
                     print("Número no válido")
+
+            input("\nPresione Enter para continuar...")
+            limpiar_pantalla()
 
     except Exception as e:
         print(f"Ha ocurrido un error: {e}")
