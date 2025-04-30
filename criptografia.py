@@ -32,8 +32,8 @@ def cesar_cod (texto, desplazamiento):
     Texto codificado (String)
     """
     es_string(texto)
-    if type(desplazamiento) != int and desplazamiento < 1:
-        raise Exception("El desplazamiento debe ser un numero entero positivo")
+    if type(desplazamiento) != int:
+        raise Exception("El desplazamiento debe ser un numero entero ")
     alfabeto = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","ñ"
                 ,"o","p","q","r","s","t","u","v","w","x","y","z"]
     #crear el alfabeto codificado
@@ -560,7 +560,7 @@ def leer_texto(metodo):
     -Método: entero 0 o 1
     Salida: Texto string
     """
-    alfabeto = "abcdefghijklmnñopqrstuvwxyz123"
+    alfabeto = "abcdefghijklmnñopqrstuvwxyz123- " 
 
     if metodo == 0:
         mensaje = "Ingrese el texto a codificar: "
