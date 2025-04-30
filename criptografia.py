@@ -1,4 +1,5 @@
 
+
 def preparar_texto(texto):
     """
     Convierte el texto a minusculas, sustituye acentos y elimina espacios
@@ -552,7 +553,7 @@ def limpiar_pantalla():
     print("\n"* 30)
 
 ###
-def leer_texto(metodo):
+def leer_texto(metodo, opcion):
     """
     Subrutina que interactúa con el usuario para que ingrese el texto a codificar o
     decodificar dependiendo de la entrada
@@ -560,7 +561,7 @@ def leer_texto(metodo):
     -Método: entero 0 o 1
     Salida: Texto string
     """
-    alfabeto = "abcdefghijklmnñopqrstuvwxyz123- " 
+    alfabeto = "aábcdeéfghiíjklmnñoópqrstúuüvwxyzAÁBCDÉEFGHÍIJKLMNÑOÓPQRSTUÜsÚVWXYZ123- " 
 
     if metodo == 0:
         mensaje = "Ingrese el texto a codificar: "
@@ -569,7 +570,8 @@ def leer_texto(metodo):
     
     while True:
         texto = input(mensaje)
-        texto = preparar_texto(texto)
+        if opcion != 5 and opcion != 6:
+            texto = preparar_texto(texto)
         if texto == "":
             print("El texto no puede ser vacío.")
             continue
@@ -629,13 +631,13 @@ def main():
                 case 1:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         desplazamiento = int(input("Digite el desplazamiento a realizar: "))
                         texto_cod = cesar_cod(texto, desplazamiento)
                         print()
                         print("texto codificado: " + texto_cod)
                     else:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         desplazamiento = int(input("Digite el desplazamiento a realizar: "))
                         texto_dec = cesar_dec(texto, desplazamiento)
                         print()
@@ -644,13 +646,13 @@ def main():
                 case 2:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         palabra = input("Digite la palabra clave: ")
                         texto_cod = mono_cod(texto, palabra)
                         print()
                         print("texto codificado: " + texto_cod)
                     else:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         palabra = input("Digite la palabra clave: ")
                         texto_dec = mono_dec(texto, palabra)
                         print()
@@ -659,13 +661,13 @@ def main():
                 case 3:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         palabra = input("Digite la palabra clave: ")
                         texto_cod = vigenere_cod(texto, palabra)
                         print()
                         print("texto codificado: " + texto_cod)
                     else:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         palabra = input("Digite la palabra clave: ")
                         texto_dec = vigenere_dec(texto, palabra)
                         print()
@@ -674,13 +676,13 @@ def main():
                 case 4:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         palabra = input("Digite la palabra clave: ")
                         texto_cod = playfair_cod(texto, palabra)
                         print()
                         print("texto codificado: " + texto_cod)
                     else:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         palabra = input("Digite la palabra clave: ")
                         texto_dec = playfair_dec(texto, palabra)
                         print()
@@ -689,12 +691,12 @@ def main():
                 case 5:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         texto_cod = railfence_cod(texto)
                         print()
                         print("texto codificado: " + texto_cod)
                     else:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         texto_dec = railfence_dec(texto)
                         print()
                         print("texto decodificado: " + texto_dec)
@@ -702,13 +704,13 @@ def main():
                 case 6:
                     metodo = codificar_o_decodificar()
                     if metodo == 0:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         lineas = int(input("Ingrese la cantidad de lineas: "))
                         texto_cod = escitala_cod(texto, lineas)
                         print()
                         print("texto codificado: " + texto_cod)
                     else:
-                        texto = leer_texto(metodo)
+                        texto = leer_texto(metodo, opcion)
                         lineas = int(input("Ingrese la cantidad de lineas: "))
                         texto_dec = escitala_dec(texto, lineas)
                         print()
